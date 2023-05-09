@@ -16,13 +16,14 @@ Vagrant.configure("2") do |config|
   config.vm.box = "generic/rhel8"
   config.vm.network "private_network", ip: guest_ip
 ### Provision Network+Firewall
-config.vm.provision "shell", path: dirpath + "\\modules\\network\\setting-network.sh"  
+  config.vm.provision "shell", path: dirpath + "\\modules\\network\\setting-network.sh"  
 ### Provision HTTPD
   config.vm.provision "shell", path: dirpath + "\\modules\\httpd\\provision-httpd-yum.sh"
 ### Provision JWS
   config.vm.provision "shell", path: dirpath + "\\modules\\jws\\provision-jws-zip.sh"
 
   config.vm.synced_folder dirpath + "\\sync-folder", "/home/vagrant"
+  config.vm.synced_folder dirpath + "\\modules", "/home/modules"
   config.vm.synced_folder workpath, "/home/cases"
   config.vm.network "public_network", bridge: "Intel(R) Wireless-AC 9560"
   config.vm.hostname = host
