@@ -1,6 +1,6 @@
 
 #### Loading Variables ####
-guest_ip  = "192.168.8.87"
+guest_ip  = "192.168.56.87"
 dirpath = __dir__
 # host = __dir__.match(/[^\/]+.$/) ### hostname as a name of folder
 host = "vm-vagrant-rhel87"
