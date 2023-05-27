@@ -1,0 +1,1 @@
+echo -e "0\n1" | sleep 3 | java -jar /vagrant/jboss-eap-7.0.0-installer.jar

@@ -1,0 +1,22 @@
+
+#### Loading Variables ####
+guest_ip  = "192.168.56.87"
+dirpath = __dir__
+# host = __dir__.match(/[^\/]+.$/) ### hostname as a name of folder
+host = "vm-vagrant-rhel87"
+
+#### Running Provision ####
+Vagrant.configure("2") do |config|
+  config.vm.provider "virtualbox" do |v|
+    v.name = host
+  end  
+  config.vm.box = "generic/rhel8"
+  config.vm.network "private_network", ip: guest_ip
+  config.vm.provision "shell", path: "/home/dbuena/Documents/webservers/laboratory/iac/shell-scripts/provision.sh"
+  config.vm.synced_folder "/home/dbuena/Documents/webservers/laboratory/iac/shell-scripts", "/home/vagrant-shell-scripts"
+  config.vm.synced_folder "/home/dbuena/Documents/cases", "/home/vagrant-cases" 
+  config.vm.synced_folder "/home/dbuena/Documents", "/home/vagrant-documents"
+  config.vm.network "public_network", bridge: "wlp61s0"
+  config.vm.hostname = host
+end
+

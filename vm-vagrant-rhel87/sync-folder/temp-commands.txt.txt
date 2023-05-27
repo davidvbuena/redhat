@@ -1,0 +1,97 @@
+user:admin
+pass:redhat12345@
+
+### give root adm permission to jboss user
+
+useradd jboss
+usermod --append -G jboss jboss
+usermod --append -G root jboss
+
+### start jboss
+
+[root@rhel8-lab2 /]# locate standalone.sh
+/opt/jboss-eap-7.0/bin/standalone.sh
+[root@rhel8-lab2 /]# /opt/jboss-eap-7.0/bin/standalone.sh
+
+### custom locate folder
+	### creating folder and associate custom confs
+	
+cd /opt/jboss-eap-7.0/standalone
+
+cp -r configuration deployments lib \
+~/JB248/labs/custom-eap	
+
+### allow alternative dir for server
+
+cd /opt/jboss-eap-7.0/bin
+./standalone.sh \
+-Djboss.server.base.dir=/home/student/JB248/labs/custom-eap/
+
+### try another instance on default conf [already in my case]
+sudo -u jboss /opt/jboss-eap-7.0/bin/standalone.sh
+
+cp -r configuration deployments lib /home/student/JB248/labs/standalone-instance
+
+############## Configure JBoss EAP network interfaces and socket binding groups
+
+mkdir /home/student/JB248/labs/configuring-profiles/configuration/
+
+
+cd /opt/jboss-eap-7.0/bin
+
+./standalone.sh \
+-Djboss.server.base.dir=/home/student/JB248/labs/configuring-profiles/
+
+### to configure ip for management console
+
+./standalone.sh -bmanagement 127.0.0.1
+
+############## Configuring JBoss EAP in Standalone Mode
+
+mkdir /opt/jboss/
+mkdir /opt/jboss/standalone
+cd /opt/jboss-eap-7.0/standalone
+### (doesn't work well because i need grant premission) ### sudo -u jboss cp -r configuration deployments lib /opt/jboss/standalone
+cp -r configuration deployments lib /opt/jboss/standalone
+
+### Starting 
+
+cd /opt/jboss-eap-7.0/bin
+### sudo -u jboss  ./standalone.sh -Djboss.server.base.dir=/opt/jboss/standalone/
+### ./standalone.sh -Djboss.server.base.dir=/opt/jboss/standalone/ 
+nohup ./standalone.sh -Djboss.server.base.dir=/opt/jboss/standalone/ > /opt/jboss/standalone/log/dbuena-exec.log &
+
+### Configuring and Starting standalone2
+
+mkdir /opt/jboss/standalone2
+cd /opt/jboss-eap-7.0/standalone
+cp -r configuration deployments lib /opt/jboss/standalone2
+
+### Starting
+
+/opt/jboss-eap-7.0/bin/standalone.sh \
+-Djboss.server.base.dir=/opt/jboss/standalone2/ \
+-Djboss.socket.binding.port-offset=10000
+
+### Log Level Debug via console 
+
+Access the Management Console at http://localhost:19990
+
+Configuration > Subsystems > Logging  > View > HANDLER > Console > Attributes > Edit -> Change the Level from INFO to DEBUG. > Save
+
+### to stop jboss 
+press ctrl+c
+
+############## Scripting Configuration and Deploying Applications
+### Testing executing
+mkdir /home/student/JB248/labs/executing-cli
+cp -r  standalone-instance/ /home/student/JB248/labs/executing-cli
+
+/opt/jboss-eap-7.0/bin/jboss-cli.sh
+[disconnected /] embed-server --server-config=standalone-ha.xml
+[standalone@embedded /] 
+
+
+
+
+
